@@ -1,7 +1,3 @@
-# 7z-backup-handler
-Uses the 7z DLL to package the contents of a given list of folders into a 7z archive (primarily for backup purposes)
-
-<b>Usage</b><br>
 The list of items (directories / files) to archive, and the directory to store archives, are stored in a source file (delimited by newlines) and destination file respectively.
 You will need to set the paths to these files in the source.
 
