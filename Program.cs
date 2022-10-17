@@ -4,20 +4,26 @@ using System.Diagnostics;
 
 namespace copytest
 {
+	enum ExitCode
+	{
+		Success = 0,
+		Exception = 1,
+		FilesPresent = 2
+	}
+
+
+
 	class Program
 	{
-		const int COMPLETED_NORMALLY = 0;
-		const int EXCEPTION_OCCURED = 1;
-		const int FILES_ALREADY_PRESENT = 2;
-
 		const string _7Z_EXE = "C:/Program Files/7-Zip/7z.exe";
 		const string _7Z_EXTENSION = ".7z";
+		const string _7Z_ARGS = " -m0=LZMA2 -mx=9 -mmt=2";
 
 		// Files to read data in from
 		static readonly string sources_data =
-			"";
+			@"";
 		static readonly string destination_data =
-			"";
+			@"";
 
 
 		// Variables to hold the data itself
@@ -122,7 +128,7 @@ namespace copytest
 					Print($"Cannot start backup: destination 7z {destination} already exists");
 					Beep();
 					AwaitInput();
-					Environment.Exit(FILES_ALREADY_PRESENT);
+					Environment.Exit((int)ExitCode.FilesPresent);
 				}
 
 				long start_time = DateTime.Now.Ticks;
@@ -143,12 +149,12 @@ namespace copytest
 						Print($"Took {TicksToTime(DateTime.Now.Ticks - start_time)}");
 						AwaitInput();
 
-						Environment.Exit(COMPLETED_NORMALLY);
+						Environment.Exit((int)ExitCode.Success);
 					}
 
 					Process Process7z = new Process();
 					Process7z.StartInfo.FileName = _7Z_EXE;
-					Process7z.StartInfo.Arguments = $"a \"{destination}\" \"{folders[i]}\"";
+					Process7z.StartInfo.Arguments = $"a \"{destination}\" \"{folders[i]}\"" + _7Z_ARGS;
 
 					Print($"Starting with {Process7z.StartInfo.Arguments}");
 					Process7z.Start();
@@ -164,7 +170,7 @@ namespace copytest
 			{
 				Print("An exception occured when reading in metadata: " + e);
 				AwaitInput();
-				Environment.Exit(EXCEPTION_OCCURED);
+				Environment.Exit((int)ExitCode.Exception);
 			}
 		}
 	}
